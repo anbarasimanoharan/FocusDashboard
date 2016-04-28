@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <title>File upload Node.</title>
+  </head>
+  <body>
+      <form id="uploadForm"
+          enctype="multipart/form-data"
+          action="/index/photo"
+          method="post">
+      <input type="file" name="userPhoto" />
+      <input type="submit" value="Upload File" name="submit">
+      <span id = "status"></span>
+      </form>
+
+      <a href="#" id="user-select">Display dashboard</a>
+      <textarea id="username"></textarea>
+      
+
+      <select id="selectUser">
+      </select>
+
+      <a href="#" id="generateDashboard">Display dashboard</a>
+
+
+  </body>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+  
+
+  <script>
+
+
+  var data = "{{ data }}";
+  data = data.split("&quot;").join('"');
+  data=JSON.parse(data);
+
+  var select = document.getElementById("selectUser");
+  
+  for(var names=0;names<data.length;names++){
+    var opt=data[names].username;
+    var el = document.createElement("option");
+    el.textContent = opt;
+    el.value = opt;
+    select.appendChild(el);
+
+  }
+   
+  $(document).ready(function() {
+    $("#user-select").click(function() {
+      username =$("#username").val();
+      window.location.href="/index?name="+username; 
+    });
+
+
+    $('#generateDashboard').click(function(){
+      username= $('#selectUser :selected').text();
+      window.location.href="/index?name="+username; 
+      
+    })
+    $('#uploadForm').submit(function() {
+	  $("#status").empty().text("File is uploading...");
+    var that=this;
+    $(this).ajaxSubmit({
+
+      error: function(xhr) {
+	      status('Error: ' + xhr.status);
+      },
+
+      success: function(response) {
+		   	$("#status").empty().text(response);
+      window.location.href="/index?name="+response;          }
+      });
+
+      return false;
+     });    
+  });
+
+  
+  </script>
+
+
+</html>
