@@ -14,9 +14,11 @@ var storage	=	multer.diskStorage({
   	callback(null, file.originalname);
   }
 });
+
+//to upload a file and display graphs accordingly
 var upload = multer({ storage : storage}).single('userPhoto');
 
-
+//To find and display top 20 user list
 function list_users(req,callback){
 	var conString = "pg://postgres:postgres@localhost:5432/focus";
 	var client = new pg.Client(conString);
@@ -32,6 +34,7 @@ function list_users(req,callback){
 	});
 }
 
+//To find the average focus level of each day in a week
 function avg_focus_records(req, callback) {
 
 	var conString = "pg://postgres:postgres@localhost:5432/focus";
@@ -67,7 +70,7 @@ function avg_focus_records(req, callback) {
 
 }
 
-
+//To find the average focus level of each day of the past one week
 function focus_last_week(req,callback){
 
 	var conString = "pg://postgres:postgres@localhost:5432/focus";
@@ -102,11 +105,10 @@ function focus_last_week(req,callback){
     });	
 			
 });
-
-	
-
 }
 
+
+//To find the average focus level of each hour of a week 
 function heatmap_records(req, callback) {
 
 	var conString = "pg://postgres:postgres@localhost:5432/focus";
@@ -174,7 +176,7 @@ function GetTimezoneOffset(user, callback){
 }
 
 
-
+//To find the focus level for each category
 function categoryVsFocus(req,callback){
 	var conString = "pg://postgres:postgres@localhost:5432/focus";
 	var client = new pg.Client(conString);
@@ -200,6 +202,7 @@ function categoryVsFocus(req,callback){
 			
 }
 
+//To find the navigation count for each category
 function categoryVsNav(req,callback){
 	var conString = "pg://postgres:postgres@localhost:5432/focus";
 	var client = new pg.Client(conString);
@@ -225,7 +228,7 @@ function categoryVsNav(req,callback){
 			
 }
 
-
+//To find the number of utilization of each tool
 function toolVsCount(req,callback){
 	var conString = "pg://postgres:postgres@localhost:5432/focus";
 	var client = new pg.Client(conString);
@@ -246,16 +249,23 @@ function toolVsCount(req,callback){
     });	
 
 }
+
+
 function initialize(app){
 
 	//These are the API end points that you can write.
 
 	//Setting up an event listener for GET request to '/' 
+	//Main Dashboard Page
 	app.get('/index', function(req, res){ 
+
+		//fetching the username from the query result.			
 		queryName= req.query.name;
 		var username=queryName.split("-");
 		user=username[0];
 
+
+		//To find the average focus level of each day in a week
 		avg_focus_records(req,function(r){
 			var day=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 			var focus_day_dt=[];
@@ -264,6 +274,7 @@ function initialize(app){
 			var week_avg=0;
 			var week_count=0;
 			
+			//To find the average focus level of each day of the past one week
 			focus_last_week(req,function(week_data){
 				var day=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 				var focus_week_dt=[];
@@ -284,13 +295,16 @@ function initialize(app){
 
 				}
 
+				//Finding the average focus level in general
 				gen_focus_avg=total_avg/total_count;
 				gen_focus_avg=Math.round(gen_focus_avg*100)/100;
 
+				//Finding the average focus level for the past week
 				week_focus_avg=week_avg/week_count;
 				week_focus_avg=Math.round(week_focus_avg*100)/100;
 
 
+				//To find the average focus level of each hour of a week 
 				heatmap_records(req,function(r){
 					var heatmap_dt=[];
 					var max_day=0;
@@ -309,11 +323,15 @@ function initialize(app){
 								var hour_focus=r[x].sum/r[x].count;
 								hour_focus=Math.round(hour_focus*100)/100;
 								heatmap_dt.push({"day":i+1,"hour":j+1,"value":hour_focus});
+
+								//Finding most productive hour and day of a week
 								if(hour_focus>max_value){
 									max_value=hour_focus;
 									max_hour=j;
 									max_day=i;
 								}
+
+								//Finding least productive hour and day of a week
 								if(hour_focus<min_value){
 									min_value=hour_focus;
 									min_hour=j;
@@ -325,11 +343,17 @@ function initialize(app){
 						
 					}
 
+					//To find the focus level for each category
 					categoryVsFocus(req,function(catVsfoc){
 
+						//To find the navigation count for each category
 						categoryVsNav(req, function(catVsNav){
 
+							//To find the number of utilization of each tool
 							toolVsCount(req,function(tool_data){
+
+
+								// Render the data in index.html
 								res.render('index.html',{"heatmap":JSON.stringify(heatmap_dt), "week_dt":JSON.stringify(focus_week_dt),
 								"focus_overall":gen_focus_avg, "most_prod_day":max_day, "most_prod_hour":max_hour, "focus_week":week_focus_avg, 
 								"min_prod_day":min_day,"min_prod_hour":min_hour, "user":user.toUpperCase(),
@@ -401,13 +425,15 @@ function initialize(app){
 
 	
 	app.get('/', function(req, res){
+
+		//To find and display top 20 user list
 		list_users(req,function(r){
 			res.render('upload.html',{"data":JSON.stringify(r)});
 		});
 		
     });
 
-		app.post('/index/photo', upload, function(req,res,next){
+	app.post('/index/photo', upload, function(req,res,next){
 		res.end(req.file.originalname);			
 	});
     

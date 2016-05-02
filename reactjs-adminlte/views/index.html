@@ -264,9 +264,7 @@
 
   <script>
 
-    
-
-
+    //heatmap script file
     var margin = { top: 50, right: 0, bottom: 100, left: 30 },
         width = 960 - margin.left - margin.right,
         height = 430 - margin.top - margin.bottom,
@@ -303,7 +301,6 @@
         .attr("transform", "translate(" + gridSize / 2 + ", -6)")
         .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
 
-    //var heatmapData = [ {day:1, hour:2, value:99}, {day:4, hour:2, value:99} ];
     var heatmapData = "{{ heatmap }}";
     heatmapData = heatmapData.split("&quot;").join('"');
     heatmapData=JSON.parse(heatmapData);
@@ -360,6 +357,7 @@
 
     heatmapChart(heatmapData);
 
+    //end heatmap script
 
     
     
@@ -434,7 +432,7 @@
 
 
 
-
+    //Focus level vs day of week- Line chart  
     var focus_day_data = "{{ week_dt }}";
     focus_day_data = focus_day_data.split("&quot;").join('"');
 
@@ -460,6 +458,7 @@
     });
 
 
+    //Focus level vs category -bar chart
     var focus_cat_data = "{{ category_data }}";
     focus_cat_data = JSON.parse(focus_cat_data.split("&quot;").join('"').split("&amp;").join('&'));
     var input_label = [];
@@ -518,6 +517,8 @@
         barChartOptions.datasetFill = false;
         barChart.Bar(barChartData, barChartOptions);
 
+
+    //Category vs Navigation count - Bar chart    
     var nav_cat_data = "{{ navigation_dt }}";
     nav_cat_data = JSON.parse(nav_cat_data.split("&quot;").join('"').split("&amp;").join('&'));
     var input_label = [];
@@ -576,14 +577,15 @@
         barChartOptions.datasetFill = false;
         barChart.Bar(navChartData, barChartOptions);
 
-        $("#gen_focus").text("{{ focus_overall }}");
+    
+    //Stats and finding section    
+    $("#gen_focus").text("{{ focus_overall }}");
     $("#week_focus").text("{{focus_week}}");
     var text_content=times["{{most_prod_hour}}"]+","+ days["{{most_prod_day}}"];
     $("#most_prod").text(text_content);
 
     var text_content=times["{{min_prod_hour}}"]+","+ days["{{min_prod_day}}"];
     $("#least_prod").text(text_content);
-    
 
   </script>
 </body>
