@@ -21,11 +21,12 @@ Finding answers for these kind of questions will in turn lead to an actual under
 
 ####Instructions to run
 - Fork or clone this repo
-- Install PostgreSQL 9.3.12 and pgAdminIII
-- Run the create database query found in the schema.sql in the 'db' folder
-- Within the database run the create table queries present in schema.sql in the 'db' folder
-- For each table created the corresponding csv file is located at [drive](https://drive.google.com/open?id=0BwSv3c2aQOYRelBSdmNCZ1p4VGs). In pdAdmin right click on each table and click import -> In file options, select the filename as the corresponding tables available as csv in the csv-files folder. select format as csv. In columns uncheck the column 'id' and click on 'Import' button. 
 - Install nodejs and NPM
+- Install PostgreSQL 9.3.12 and pgAdminIII (available in Ubuntu Software Center or at [http://www.pgadmin.org/download/](http://www.pgadmin.org/download/) with username and password as 'postgres'
+- Go to the project folder from your terminal and run `npm install pg`
+- Run the create database query located at reactjs-adminlte/db/schema.sql
+- Within the database run the create table queries present in the location reactjs-adminlte/db/schema.sql
+- For each table created the corresponding csv file is located at [drive](https://drive.google.com/open?id=0BwSv3c2aQOYRelBSdmNCZ1p4VGs). In pdAdmin right click on each table and click import -> In file options, select the filename as the corresponding tables available as csv in the csv-files folder. select format as csv. In columns uncheck the column 'id' and click on 'Import' button. 
 - Go to the project folder reactjs-adminlte from your terminal and run `npm install`
 - Run `node server.js`
 - Going to [http://localhost:8000](http://localhost:8000) will render an initial page where you can select a user from the dropdown to get a dashboard for that user.
