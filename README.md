@@ -5,7 +5,7 @@
 - Install PostgreSQL 9.3.12 and pgAdminIII
 - Run the create database query found in the schema.sql in the 'db' folder
 - Within the database run the create table queries present in schema.sql in the 'db' folder
-- For each table created the corresponding csv file is located at [https://drive.google.com/folderview?id=0BwSv3c2aQOYRelBSdmNCZ1p4VGs&usp=sharing](drive). In pdAdmin right click on each table and click import -> In file options, select the filename as the corresponding tables available as csv in the csv-files folder. select format as csv. In columns uncheck the column 'id' and click on 'Import' button. 
+- For each table created the corresponding csv file is located at [drive](https://drive.google.com/open?id=0BwSv3c2aQOYRelBSdmNCZ1p4VGs). In pdAdmin right click on each table and click import -> In file options, select the filename as the corresponding tables available as csv in the csv-files folder. select format as csv. In columns uncheck the column 'id' and click on 'Import' button. 
 
 #### Instructions to run
 - Install nodejs and NPM
