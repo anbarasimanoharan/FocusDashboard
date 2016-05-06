@@ -1,8 +1,6 @@
-#Create database
 CREATE database focus with OWNER= foo
 
 
-#Create tables
 CREATE TABLE TinyFocus(
 	id SERIAL PRIMARY KEY,
 	FocusIndex INTEGER,
